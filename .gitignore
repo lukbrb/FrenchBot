@@ -1,0 +1,4 @@
+.vscode
+backend/frenchbot.egg-info
+fbot_env
+.env
