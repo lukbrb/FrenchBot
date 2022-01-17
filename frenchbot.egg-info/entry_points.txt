@@ -1,0 +1,3 @@
+[console_scripts]
+frenchbot = scraper.app:main
+

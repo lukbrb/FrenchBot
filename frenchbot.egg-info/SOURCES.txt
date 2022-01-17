@@ -1,0 +1,7 @@
+setup.py
+frenchbot.egg-info/PKG-INFO
+frenchbot.egg-info/SOURCES.txt
+frenchbot.egg-info/dependency_links.txt
+frenchbot.egg-info/entry_points.txt
+frenchbot.egg-info/requires.txt
+frenchbot.egg-info/top_level.txt
