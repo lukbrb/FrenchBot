@@ -57,19 +57,18 @@ class Larousse:
 
         # We first get the correct URL based on the method
         if methode == 'trad':
-            start_dico = self.requests_types[methode][langage]
+            methode_dico = self.requests_types[methode][langage]
         else:
-            start_dico = self.requests_types[methode]
+            methode_dico = self.requests_types[methode]
 
-        base_url = start_dico.get("URL")
+        base_url = methode_dico.get("URL")
 
         url = base_url + mot   # we construct the URL for research
 
         try:
             html = self.get_html(url)
-            result = html.find(start_dico.get('tag'), {"class": start_dico.get('class')})
+            result = html.find(methode_dico.get('tag'), {"class": methode_dico.get('class')})
             return result
 
         except Exception as e:
-            return f"Pas de {start_dico.get('fullname')} trouvée(s) en raison de:\n{e}"
-            
+            return f"Pas de {methode_dico.get('fullname')} trouvée(s) en raison de:\n{e}"
