@@ -2,61 +2,74 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def get_html(url):
-    """ Fonction qui envoie une requếte à l'url entrée en argument.
-        Renvoie un objet BeautifulSoup (du contenu HTML retravaillé en gros) si la requête a été fructueuse.
-        Renvoie None et affiche un message d'erreur dans le cas contraire.
-    """
-    # On vérifie d'abord que l'url est valide
+class Larousse:
+    def __init__(self) -> None:
+        self.requests_types = {
+            'trad': 
+            {   
+                "FR":
+                {
+                    "class": "lienarticle2",
+                    "tag": "a",
+                    "URL": "https://www.larousse.fr/dictionnaires/francais-allemand/",
+                    "fullname": "traduction"
+                },
+                "DE":
+                {
+                    "class": "Traduction",
+                    "tag": "span",
+                    "URL": "https://www.larousse.fr/dictionnaires/allemand-francais/",
+                    "fullname": "traduction"
+                }
+            },
 
-    r = requests.get(url)  
+            'def':
+            {
+                "class": "Definitions",
+                "tag": "ul",
+                "URL": "https://www.larousse.fr/dictionnaires/francais/",
+                "fullname": "définition"
+            },
 
-    if r.ok:  # équivalent à r.status_code == 200
-        return BeautifulSoup(r.content, "lxml")
-    else:
-        print(f"Erreur d'accès, code: {r.status_code}")
-        return None
-
-# TODO: créer une classe qui s'occupe de de faire les requêtes et chercher les infos selon les arguments passés
-# plutôt que de répéter le même code dans chaque fonction 
-
-def get_translation(word, fr=True):
-    """ Function that will take a French word as an argument
-    and return the translation in German.
-    """
-
-    if fr == True:
-        base_url = "https://www.larousse.fr/dictionnaires/francais-allemand/"
-        tag = "a"
-        classe = "lienarticle2"
-    else:
-        base_url = "https://www.larousse.fr/dictionnaires/allemand-francais/"
-        tag = "span"
-        classe = "Traduction"
-        
-    research = base_url + word 
-    html = get_html(research)
-    trad_word = html.find(tag, {"class": classe})
-    if trad_word:
-        return trad_word.text
-    else:
-        return "Traduction non trouvée"
+            'conj': 
+            {
+                "URL": "https://www.larousse.fr/conjugaison/francais/",
+                "fullname": "conjugaisons"
+            }
+        }
 
 
-def get_definition(word):
-    """ Function that will take a French word 
-        and returns its defintion.
-    """
-    base_url = "https://www.larousse.fr/dictionnaires/francais/"
-    research = base_url + word 
-    print("Définition de", word)
-    return  get_html(research)
+    def get_html(self, url):
+        """ Fonction qui envoie une requếte à l'url entrée en argument.
+            Renvoie un objet BeautifulSoup (du contenu HTML retravaillé en gros) si la requête a été fructueuse.
+            Renvoie None et affiche un message d'erreur dans le cas contraire.
+        """
+        r = requests.get(url)  
 
-def get_conjugaison(verb):
-    """ Function that will take the infinitive of 
-        a verb and return all the 'conjugaison'    
-    """
-    base_url = "https://www.larousse.fr/conjugaison/francais/"
-    research = base_url + verb
-    print("Conjugaison de", verb)
-    return get_html(research)
+        if r.ok:  # équivalent à r.status_code == 200
+            return BeautifulSoup(r.content, "lxml")
+        else:
+            return None
+
+    def get_element(self, methode: str, mot: str, langage="FR"):
+        methode = methode.lower()
+        assert methode in self.requests_types.keys(), f"{methode} is not a valid method. Accepted methods are 'trad', 'def' and 'conj'"
+
+        # We first get the correct URL based on the method
+        if methode == 'trad':
+            start_dico = self.requests_types[methode][langage]
+        else:
+            start_dico = self.requests_types[methode]
+
+        base_url = start_dico.get("URL")
+
+        url = base_url + mot   # we construct the URL for research
+
+        try:
+            html = self.get_html(url)
+            result = html.find(start_dico.get('tag'), {"class": start_dico.get('class')})
+            return result
+
+        except Exception as e:
+            return f"Pas de {start_dico.get('fullname')} trouvée(s) en raison de:\n{e}"
+            

@@ -1,6 +1,5 @@
 import argparse
-from sys import argv
-from frenchscrapper import get_translation, get_definition, get_conjugaison
+from api import get_translation, get_definition, get_conjugaison
 
 
 def main(commande):
@@ -11,8 +10,7 @@ def main(commande):
     """
     if commande.traduction:
         # commands.traduction est soit FR soit DE
-        language = {'FR': True, 'DE': False}
-        traduction = get_translation(commande.mot, language[commande.traduction])
+        traduction = get_translation(commande.mot, commande.traduction)
         print(f"Traduction de {commande.mot}:", traduction)
     
     if commande.definition:
@@ -37,20 +35,20 @@ if __name__ == "__main__":
         type=str, 
         choices=["FR", "DE"], 
         help="Traduction d'un mot du français vers l'allemand, ou vice-versa."
-        )
+    )
 
     parser.add_argument(
         "-d", "--definition", 
         action="store_true",  
         help="Donne la définition du mot passé en argument."
-        )
+    )
     
     parser.add_argument(
         "-c", "--conjugaison", 
         type=str,  
         nargs="?", 
         help="Cherche la conjugaison d'un verbe. Le temps peut être spécifié en argument."
-        )
+    )
     
     parsed_args = parser.parse_args()
 
