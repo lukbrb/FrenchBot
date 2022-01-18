@@ -14,10 +14,10 @@ def get_definition(word):
     result = page.get_element(mot=word, methode="def")
     if result:
         definitions = [item.text for item in result]
-        return definitions
+        return "\n".join(definitions)
     return f"Pas de définition trouvée pour {word}."
 
 def get_conjugaison(verbe, temps="présent"):
     page = Larousse()
     result = page.get_element(mot=verbe, methode="conj")
-    return result 
+    return result

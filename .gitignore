@@ -2,3 +2,6 @@
 fbot_env
 .env
 frenchbot.egg-info
+scraper/__pycache__
+scraper/argparse
+scraper/__pycache__/frenchscrapper.cpython-38.pyc
