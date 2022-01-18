@@ -1,40 +1,57 @@
+import argparse
 from sys import argv
-from .frenchscrapper import get_translation, get_definition, get_conjugaison
+from frenchscrapper import get_translation, get_definition, get_conjugaison
 
 
-commands = {
-    "--trad": get_translation,
-    "--conj": get_conjugaison,
-    "--def" : get_definition
-}
-
-
-# TODO: améliorer l'app avec le module pour CLI
-
-def main():
+def main(commande):
     """ 
         Command-line interface for the FrenchBot. 
 
         Loads the command name and parameters from :py:data: `argv`.
     """
+    if commande.traduction:
+        # commands.traduction est soit FR soit DE
+        language = {'FR': True, 'DE': False}
+        traduction = get_translation(commande.mot, language[commande.traduction])
+        print(f"Traduction de {commande.mot}:", traduction)
     
-    if len(argv) == 3:
-        command_name = argv[1]
-        mot = argv[2]
-
-        if command_name in commands.keys():
-            return commands[command_name](mot)
-        else:
-            print("Invalid command")
-
-    else:
-        print("Enter one of the command:")
-        print("--trad")
-        print("--conj")
-        print("--def")
-        print("and the word to work with")
-
+    if commande.definition:
+        definition = get_definition(commande.mot)
+        print(f"Définitions de {commande.mot}:\n{definition}")
+    
+    if commande.conjugaison:
+        conjugaisons = get_conjugaison(commande.mot)
+        print(f"Conjugaisons de {commande.mot}:\n{conjugaisons}")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Programme fournissant traductions (FR->DE, DE->FR), définitions et conjugaisons.")
+    parser.add_argument(
+        "mot",
+        type=str,
+        help="Mot/verbe à traduire, définir ou conjuguer."
+    )
+
+    parser.add_argument(
+        "-t", "--traduction", 
+        type=str, 
+        choices=["FR", "DE"], 
+        help="Traduction d'un mot du français vers l'allemand, ou vice-versa."
+        )
+
+    parser.add_argument(
+        "-d", "--definition", 
+        action="store_true",  
+        help="Donne la définition du mot passé en argument."
+        )
+    
+    parser.add_argument(
+        "-c", "--conjugaison", 
+        type=str,  
+        nargs="?", 
+        help="Cherche la conjugaison d'un verbe. Le temps peut être spécifié en argument."
+        )
+    
+    parsed_args = parser.parse_args()
+
+    main(parsed_args)

@@ -17,13 +17,14 @@ def get_html(url):
         print(f"Erreur d'accès, code: {r.status_code}")
         return None
 
+# TODO: créer une classe qui s'occupe de de faire les requêtes et chercher les infos selon les arguments passés
+# plutôt que de répéter le même code dans chaque fonction 
 
 def get_translation(word, fr=True):
     """ Function that will take a French word as an argument
     and return the translation in German.
     """
 
-    # TODO: Have a function to do the translation in the other way.
     if fr == True:
         base_url = "https://www.larousse.fr/dictionnaires/francais-allemand/"
         tag = "a"
@@ -34,12 +35,10 @@ def get_translation(word, fr=True):
         classe = "Traduction"
         
     research = base_url + word 
-    print("Traduction de", word, "...")
     html = get_html(research)
     trad_word = html.find(tag, {"class": classe})
-    if trad_word != None:
+    if trad_word:
         return trad_word.text
-    
     else:
         return "Traduction non trouvée"
 
@@ -60,4 +59,4 @@ def get_conjugaison(verb):
     base_url = "https://www.larousse.fr/conjugaison/francais/"
     research = base_url + verb
     print("Conjugaison de", verb)
-    return  get_html(research)
+    return get_html(research)
