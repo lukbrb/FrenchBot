@@ -1,4 +1,4 @@
-from frenchscrapper import Larousse
+from .frenchscrapper import Larousse
 
 
 def get_translation(word, langage):
@@ -16,6 +16,7 @@ def get_definition(word):
         definitions = [item.text for item in result]
         return "\n".join(definitions)
     return f"Pas de définition trouvée pour {word}."
+
 
 def get_conjugaison(verbe, temps="présent"):
     page = Larousse()

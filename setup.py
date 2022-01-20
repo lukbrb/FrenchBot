@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name='frenchbot',
+    name='larousse',
     version='0.0.1',
     packages=find_packages('scraper'),
 
@@ -14,7 +14,7 @@ setup(
     ],
     entry_points = {
         'console_scripts': [
-            'frenchbot=scraper.app:main',
+            'larousse=scraper.app:main',
         ]
     }
 )

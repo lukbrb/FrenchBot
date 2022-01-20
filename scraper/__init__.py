@@ -1,1 +1,0 @@
-from scraper.frenchscrapper import get_conjugaison, get_definition, get_translation
