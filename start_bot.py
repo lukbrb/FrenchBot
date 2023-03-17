@@ -4,7 +4,7 @@ from larousse.api import get_conjugaison, get_definition, get_translation
 
 
 TOKEN=''
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.default())
 
 @client.event
 async def on_ready():
