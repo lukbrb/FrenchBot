@@ -3,7 +3,7 @@ import discord
 from larousse.api import get_conjugaison, get_definition, get_translation
 
 
-TOKEN='OTI5MTE2NjE5MDE0Mjk5NzI5.YdipSA.yxGXJf0TFHlDjaDBene9E1IB8aM'
+TOKEN=''
 client = discord.Client()
 
 @client.event

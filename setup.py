@@ -7,7 +7,7 @@ setup(
     packages=find_packages('larousse'),
 
     install_requires=
-    [
+    [   'discord==1.7.3',
         'beautifulsoup4==4.10.0', 
         'requests==2.27.1',
         'lxml==4.7.1'
